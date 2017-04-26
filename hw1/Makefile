@@ -8,7 +8,7 @@ ARTIFACT=hw1.out
 
 build: ${ARTIFACT}
 
-${ARTIFACT}: board.h board.c main.c
+${ARTIFACT}: board.h board.c main.c tree.h tree.c
 	  ${CC} ${FLAGS} main.c board.c -o ${ARTIFACT}
 
 clean:

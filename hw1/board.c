@@ -35,6 +35,10 @@ BOARD_t* board_copy(BOARD_t* board) {
     return new_board;
 }
 
+void board_normalize(BOARD_t* board) {
+
+}
+
 BOARD_t* board_from_file(char* path) {
     BOARD_t* board = NULL;
     char* buffer = NULL;
@@ -89,14 +93,10 @@ BOARD_t* board_from_buffer(char* buffer, uint32_t size) {
         }
     }
 
-    if (board->width < 3 || board->height < 3)
-        goto free_board;
-
-    return board;
-
-free_board:
-    board_free(board);
-    board = NULL;
+    if (board->width < 3 || board->height < 3) {
+        board_free(board);
+        board = NULL;
+    }
 
     return board;
 }

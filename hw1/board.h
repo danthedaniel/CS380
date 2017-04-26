@@ -5,11 +5,24 @@
 
 #define GRID_UNSET -127
 
+enum DIRECTION_t {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    DIREND = 4
+};
+
 typedef struct {
     uint8_t width;
     uint8_t height;
     int8_t** grid;
 } BOARD_t;
+
+typedef struct {
+    DIRECTION_t dir;
+    int8_t piece;
+} STATECHANGE_t;
 
 /**
  * Create a BOARD_t from the contents of a file.
@@ -22,6 +35,13 @@ BOARD_t* board_from_file(char* path);
  * Initialize an empty BOARD_t on the heap.
  */
 BOARD_t* board_init();
+
+/**
+ * Modifies a board so that its pieces are numbered in a normalized format.
+ *
+ * BOARD_t* board: The target board.
+ */
+void board_normalize(BOARD_t* board);
 
 /**
  * When parsing the board specification file, will set the first unset cell to
