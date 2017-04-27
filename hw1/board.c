@@ -205,22 +205,6 @@ void board_grid_swap(BOARD_t* board, int8_t idx1, int8_t idx2) {
     }
 }
 
-int8_t int_parse(char* int_str) {
-    int8_t ret = 0;
-    bool sign = false;
-
-    for (uint8_t i = 0; i < strlen(int_str); ++i) {
-        if (int_str[i] == '-') {
-            sign = true;
-        }
-        else if (int_str[i] >= '0' && int_str[i] <= '9') {
-            ret = (ret * 10) + (int_str[i] - '0');
-        }
-    }
-
-    return sign ? -ret : ret;
-}
-
 int8_t** grid_init(uint8_t width, uint8_t height) {
     int8_t** grid = (int8_t**) malloc(sizeof(int8_t*) * height);
 
@@ -248,4 +232,24 @@ void grid_free(int8_t** grid, uint8_t height) {
         free(grid[i]);
 
     free(grid);
+}
+
+int8_t int_parse(char* int_str) {
+    int8_t ret = 0;
+    bool sign = false;
+
+    for (uint8_t i = 0; i < strlen(int_str); ++i) {
+        if (int_str[i] == '-') {
+            sign = true;
+        }
+        else if (int_str[i] >= '0' && int_str[i] <= '9') {
+            ret = (ret * 10) + (int_str[i] - '0');
+        }
+    }
+
+    return sign ? -ret : ret;
+}
+
+void statechange_print(STATECHANGE_t* statechange) {
+    printf("(%d,'%c')\n", statechange->piece, statechange->dir);
 }

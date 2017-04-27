@@ -5,7 +5,7 @@
 #include "board.h"
 
 /**
- * Solve a board with a random walk, with up to N steps.
+ * Solve a board with random walk. Use up to N steps.
  *
  * BOARD_t* board: The board to be solved.
  * uint32_t N: The maximum number of steps to take in solving the board.

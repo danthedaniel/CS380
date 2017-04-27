@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <stdbool.h>
 #include "tree.h"
 #include "board.h"
@@ -33,6 +34,11 @@ void tree_add_child(TREE_t* tree, TREE_t* child) {
 }
 
 void tree_find_valid_moves(TREE_t* tree) {
+    if (tree->change->goal) {
+        fprintf(stderr, "Already found the goal, will not search for children!\n");
+        return;
+    }
+
     BOARD_t* board = tree->state;
 
     // Search from 1..(X - 1) to ignore walls

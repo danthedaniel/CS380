@@ -159,6 +159,12 @@ void grid_free(int8_t** grid, uint8_t height);
 
 
 /**
+ * Print a STATECHANGE_t
+ */
+void statechange_print(STATECHANGE_t* statechange);
+
+
+/**
  * Parse a signed integer from a null-terminated string.
  *
  * char* int_str: The string to be parsed
