@@ -1,7 +1,11 @@
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include "search.h"
 #include "board.h"
 
 int main(int argc, char** argv) {
+    srand(time(NULL));
     int ret = 0;
     BOARD_t* board = NULL;
 
@@ -18,7 +22,7 @@ int main(int argc, char** argv) {
         goto exit;
     }
 
-    board_print(board);
+    random_walk(board, 16);
     board_free(board);
 
 exit:

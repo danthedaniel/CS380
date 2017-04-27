@@ -35,10 +35,6 @@ BOARD_t* board_copy(BOARD_t* board) {
     return new_board;
 }
 
-void board_normalize(BOARD_t* board) {
-
-}
-
 BOARD_t* board_from_file(char* path) {
     BOARD_t* board = NULL;
     char* buffer = NULL;
@@ -94,6 +90,7 @@ BOARD_t* board_from_buffer(char* buffer, uint32_t size) {
     }
 
     if (board->width < 3 || board->height < 3) {
+        fprintf(stderr, "Board file is invalid\n");
         board_free(board);
         board = NULL;
     }
@@ -102,13 +99,109 @@ BOARD_t* board_from_buffer(char* buffer, uint32_t size) {
 }
 
 void board_print(BOARD_t* board) {
-    printf("Board: (%dx%d)\n", board->width, board->height);
+    printf("%d,%d,\n", board->width, board->height);
 
     for (uint8_t i = 0; i < board->height; ++i) {
         for (uint8_t j = 0; j < board->width; ++j) {
             printf("%d,", board->grid[i][j]);
         }
         printf("\n");
+    }
+}
+
+BLOCK_t block_from_coords(BOARD_t* board, uint8_t i, uint8_t j) {
+    int8_t value = board->grid[i][j];
+    uint8_t i_max = i;
+    uint8_t j_max = j;
+
+    // Find i/j maximums for the block
+    while (board->grid[++i_max][j] == value) {}
+    i_max--;
+
+    while (board->grid[i][++j_max] == value) {}
+    j_max--;
+
+    BLOCK_t block;
+    block.upper_left.i = i;
+    block.upper_left.j = j;
+    block.lower_right.i = i_max;
+    block.lower_right.j = j_max;
+    block.value = value;
+
+    return block;
+}
+
+bool board_apply_statechange(BOARD_t* board, BLOCK_t block, STATECHANGE_t* change) {
+    bool goal_met = false;
+    int8_t i_offset = 0;
+    int8_t j_offset = 0;
+
+    switch (change->dir) {
+    case DIR_UP:
+        i_offset = -1;
+        break;
+    case DIR_DOWN:
+        i_offset = +1;
+        break;
+    case DIR_LEFT:
+        j_offset = -1;
+        break;
+    case DIR_RIGHT:
+        j_offset = +1;
+        break;
+    }
+
+    BLOCK_t new_block;
+    new_block.value = block.value;
+    new_block.upper_left.i = block.upper_left.i + i_offset;
+    new_block.upper_left.j = block.upper_left.j + j_offset;
+    new_block.lower_right.i = block.lower_right.i + i_offset;
+    new_block.lower_right.j = block.lower_right.j + j_offset;
+
+    // Fill old block with empty spaces
+    for (uint8_t i = block.upper_left.i; i <= block.lower_right.i; ++i) {
+        for (uint8_t j = block.upper_left.j; j <= block.lower_right.j; ++j) {
+            board->grid[i][j] = GRID_EMPTY;
+        }
+    }
+
+    // Fill new block in
+    for (uint8_t i = new_block.upper_left.i; i <= new_block.lower_right.i; ++i) {
+        for (uint8_t j = new_block.upper_left.j; j <= new_block.lower_right.j; ++j) {
+            if (board->grid[i][j] == GRID_GOAL && new_block.value == GOAL_PIECE)
+                goal_met = true;
+
+            board->grid[i][j] = new_block.value;
+        }
+    }
+
+    return goal_met;
+}
+
+void board_normalize(BOARD_t* board) {
+    int8_t nextIdx = GOAL_PIECE + 1;
+
+    for (uint8_t i = 0; i < board->height; ++i) {
+        for (uint8_t j = 0; j < board->width; ++j) {
+            if (board->grid[i][j] == nextIdx) {
+                nextIdx++;
+            } else if (board->grid[i][j] > nextIdx) {
+                board_grid_swap(board, nextIdx, board->grid[i][j]);
+                nextIdx++;
+            }
+        }
+    }
+}
+
+void board_grid_swap(BOARD_t* board, int8_t idx1, int8_t idx2) {
+    for (uint8_t i = 0; i < board->height; ++i) {
+        for (uint8_t j = 0; j < board->width; ++j) {
+            if (board->grid[i][j] == idx1) {
+                board->grid[i][j] = idx2;
+            } else if (board->grid[i][j] == idx2) {
+                board->grid[i][j] = idx1;
+            }
+        }
     }
 }
 
