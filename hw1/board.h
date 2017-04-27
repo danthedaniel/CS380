@@ -2,6 +2,7 @@
 #define BOARD_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define GRID_EMPTY 0
 #define GRID_WALL  1
@@ -10,12 +11,12 @@
 
 #define GOAL_PIECE 2
 
-enum DIRECTION_t {
+typedef enum {
     DIR_UP    = 'U',
     DIR_DOWN  = 'D',
     DIR_LEFT  = 'L',
     DIR_RIGHT = 'R'
-};
+} DIRECTION_t;
 
 typedef struct {
     uint8_t width;
