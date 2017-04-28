@@ -10,6 +10,7 @@ TREE_t* tree_init(BOARD_t* board, STATECHANGE_t* change) {
 
     tree->state = board;
     tree->change = change;
+    tree->parent = NULL;
     tree->children = NULL;
     tree->num_children = 0;
 
@@ -17,6 +18,9 @@ TREE_t* tree_init(BOARD_t* board, STATECHANGE_t* change) {
 }
 
 void tree_free(TREE_t* tree) {
+    if (tree == NULL)
+        return;
+
     free(tree->state);
     free(tree->change);
 
@@ -26,6 +30,7 @@ void tree_free(TREE_t* tree) {
 
 void tree_add_child(TREE_t* tree, TREE_t* child) {
     tree->num_children++;
+    child->parent = tree;
 
     if (tree->children == NULL)
         tree->children = list_init(child);
@@ -125,22 +130,39 @@ void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block) {
 }
 
 TREE_t* tree_from_board_change(BOARD_t* board, BLOCK_t block, DIRECTION_t dir) {
-    TREE_t* tree = (TREE_t*) malloc(sizeof(TREE_t));
     STATECHANGE_t* change = (STATECHANGE_t*) malloc(sizeof(STATECHANGE_t));
-
     change->dir = dir;
     change->piece = block.value;
 
     BOARD_t* new_board = board_copy(board);
     bool goal_met = board_apply_statechange(new_board, block, change);
-
     change->goal = goal_met;
-    tree->state = new_board;
-    tree->change = change;
-    tree->children = NULL;
-    tree->num_children = 0;
 
-    return tree;
+    return tree_init(new_board, change);;
+}
+
+bool tree_ancestory_contains_state(TREE_t* tree, BOARD_t* board) {
+    BOARD_t* board_clone = board_copy(board);
+    board_normalize(board_clone);
+    tree = tree->parent;
+
+    while (tree != NULL) {
+        BOARD_t* ancestor_board = board_copy(tree->state);
+        board_normalize(ancestor_board);
+        bool boards_equal = board_equals(board_clone, ancestor_board);
+        board_free(ancestor_board);
+
+        if (boards_equal) {
+            board_free(board_clone);
+            return true;
+        }
+
+        tree = tree->parent;
+    }
+
+    board_free(board_clone);
+
+    return false;
 }
 
 LIST_t* list_init(TREE_t* tree) {

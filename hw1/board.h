@@ -100,6 +100,21 @@ void board_add_to_grid(BOARD_t* board, int8_t value);
 BOARD_t* board_copy(BOARD_t* board);
 
 /**
+ * Compare two boards.
+ *
+ * BOARD_t* board1: The first board.
+ * BOARD_t* board2: The second board.
+ */
+bool board_equals(BOARD_t* board1, BOARD_t* board2);
+
+/**
+ * Check if a board has been solved.
+ *
+ * BOARD_t* board: The board to check.
+ */
+bool board_solved(BOARD_t* board);
+
+/**
  * Apply a state change to a board. Returns whether the change resulted in the
  * goal condition being met.
  *

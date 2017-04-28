@@ -11,6 +11,7 @@ typedef struct LIST_t LIST_t;
 struct TREE_t {
     BOARD_t* state;
     STATECHANGE_t* change;
+    TREE_t* parent;
     LIST_t* children;
     uint8_t num_children;
 };
@@ -60,6 +61,15 @@ void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block);
  * DIRECTION_t dir: The direction to move the block in.
  */
 TREE_t* tree_from_board_change(BOARD_t* board, BLOCK_t block, DIRECTION_t dir);
+
+/**
+ * Determine if a board state, when normalized, matches any normalized board
+ * states in a tree's lineage.
+ *
+ * TREE_t* tree: The tree whos lineage will be tested.
+ * BOARD_t* board: The board to compare against (will be normalized).
+ */
+bool tree_ancestory_contains_state(TREE_t* tree, BOARD_t* board);
 
 
 struct LIST_t {

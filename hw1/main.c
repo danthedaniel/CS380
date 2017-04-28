@@ -22,7 +22,10 @@ int main(int argc, char** argv) {
         goto exit;
     }
 
-    random_walk(board, 10000);
+    // Run with a few search implementations
+    random_walk(board, 128);
+    depth_first_search(board, 16);
+
     board_free(board);
 
 exit:

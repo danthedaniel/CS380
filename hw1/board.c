@@ -35,6 +35,29 @@ BOARD_t* board_copy(BOARD_t* board) {
     return new_board;
 }
 
+bool board_equals(BOARD_t* board1, BOARD_t* board2) {
+    if (board1->width != board2->width || board1->height != board2->height)
+        return false;
+
+    for (uint8_t i = 0; i < board1->height; ++i) {
+        for (uint8_t j = 0; j < board1->width; ++j) {
+            if (board1->grid[i][j] != board2->grid[i][j])
+                return false;
+        }
+    }
+
+    return true;
+}
+
+bool board_solved(BOARD_t* board) {
+    for (uint8_t i = 0; i < board->height; ++i)
+        for (uint8_t j = 0; j < board->width; ++j)
+            if (board->grid[i][j] == GRID_GOAL)
+                return false;
+
+    return true;
+}
+
 BOARD_t* board_from_file(char* path) {
     BOARD_t* board = NULL;
     char* buffer = NULL;
