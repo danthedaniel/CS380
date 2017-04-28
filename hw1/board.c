@@ -82,6 +82,7 @@ BOARD_t* board_from_buffer(char* buffer, uint32_t size) {
             } else {
                 board_add_to_grid(board, int_parse(tmp_str));
             }
+            // Fall through
         case '\n':
             i++;
             substr_start = i;

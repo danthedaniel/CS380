@@ -11,6 +11,7 @@ void random_walk(BOARD_t* board, uint32_t N) {
     TREE_t* root = tree;
 
     for (uint32_t i = 0; i < N; ++i) {
+        getchar();
         tree_find_valid_moves(tree);
 
         // Now select a random child state

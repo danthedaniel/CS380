@@ -34,11 +34,6 @@ void tree_add_child(TREE_t* tree, TREE_t* child) {
 }
 
 void tree_find_valid_moves(TREE_t* tree) {
-    if (tree->change->goal) {
-        fprintf(stderr, "Already found the goal, will not search for children!\n");
-        return;
-    }
-
     BOARD_t* board = tree->state;
 
     // Search from 1..(X - 1) to ignore walls
@@ -69,7 +64,9 @@ void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block) {
 
         // The move is valid if the adjacent spot is either empty, or we're
         // controlling the goal piece and the adjacent spot is the goal.
-        if (adjacent != GRID_EMPTY && (value != GOAL_PIECE && adjacent != GRID_GOAL))
+        if (value == GOAL_PIECE && adjacent == GRID_GOAL)
+            printf("Goal move - value: %d, adjacent: %d\n", value, adjacent);
+        else if (adjacent != GRID_EMPTY)
             up = false;
     }
 
@@ -83,7 +80,9 @@ void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block) {
     for (uint8_t x = j_min; x <= j_max; x++) {
         int8_t adjacent = board->grid[i_max + 1][x];
 
-        if (adjacent != GRID_EMPTY && (value != GOAL_PIECE && adjacent != GRID_GOAL))
+        if (value == GOAL_PIECE && adjacent == GRID_GOAL)
+            printf("Goal move - value: %d, adjacent: %d\n", value, adjacent);
+        else if (adjacent != GRID_EMPTY)
             down = false;
     }
 
@@ -97,7 +96,9 @@ void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block) {
     for (uint8_t y = i_min; y <= i_max; y++) {
         int8_t adjacent = board->grid[y][j_min - 1];
 
-        if (adjacent != GRID_EMPTY && (value != GOAL_PIECE && adjacent != GRID_GOAL))
+        if (value == GOAL_PIECE && adjacent == GRID_GOAL)
+            printf("Goal move - value: %d, adjacent: %d\n", value, adjacent);
+        else if (adjacent != GRID_EMPTY)
             left = false;
     }
 
@@ -111,7 +112,9 @@ void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block) {
     for (uint8_t y = i_min; y <= i_max; y++) {
         int8_t adjacent = board->grid[y][j_max + 1];
 
-        if (adjacent != GRID_EMPTY && (value != GOAL_PIECE && adjacent != GRID_GOAL))
+        if (value == GOAL_PIECE && adjacent == GRID_GOAL)
+            printf("Goal move - value: %d, adjacent: %d\n", value, adjacent);
+        else if (adjacent != GRID_EMPTY)
             right = false;
     }
 
