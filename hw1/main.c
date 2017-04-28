@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
         goto exit;
     }
 
-    random_walk(board, 100);
+    random_walk(board, 10000);
     board_free(board);
 
 exit:

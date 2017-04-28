@@ -11,8 +11,12 @@ void random_walk(BOARD_t* board, uint32_t N) {
     TREE_t* root = tree;
 
     for (uint32_t i = 0; i < N; ++i) {
-        getchar();
         tree_find_valid_moves(tree);
+
+        if (tree->num_children == 0) {
+            printf("Not sure how, but you've ran out of options...");
+            goto free_tree;
+        }
 
         // Now select a random child state
         uint8_t rand_child = rand() % tree->num_children;
@@ -27,7 +31,7 @@ void random_walk(BOARD_t* board, uint32_t N) {
         printf("\n");
 
         if (child->node->change->goal) {
-            printf("Goal state found!\n");
+            printf("Goal state found in %d steps!\n", (i + 1));
             break;
         } else {
             // Expand on selected child
@@ -35,5 +39,6 @@ void random_walk(BOARD_t* board, uint32_t N) {
         }
     }
 
+free_tree:
     tree_free(root);
 }
