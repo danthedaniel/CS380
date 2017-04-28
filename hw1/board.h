@@ -131,12 +131,12 @@ BOARD_t* board_from_buffer(char* buffer, uint32_t size);
 void board_print(BOARD_t* board);
 
 /**
- * Expand a set of left-most and top-most coordinates of a block to discover
- * the full block, then return a BLOCK_t.
+ * Expand a set of coordinates of a block to discover the full block, then
+ * return a BLOCK_t.
  *
  * BOARD_t* board: The board containing the block.
- * uint8_t i: The left-most coordinate of the block.
- * uint8_t j: The top-most coordinate of the block.
+ * uint8_t i: An i coordinate contained in a block.
+ * uint8_t j: A j coordinate contained in a block.
  */
 BLOCK_t block_from_coords(BOARD_t* board, uint8_t i, uint8_t j);
 

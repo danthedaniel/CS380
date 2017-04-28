@@ -113,18 +113,26 @@ void board_print(BOARD_t* board) {
 BLOCK_t block_from_coords(BOARD_t* board, uint8_t i, uint8_t j) {
     int8_t value = board->grid[i][j];
     uint8_t i_max = i;
+    uint8_t i_min = i;
     uint8_t j_max = j;
+    uint8_t j_min = j;
 
-    // Find i/j maximums for the block
+    // Find i/j minimums and maximums for the block
     while (board->grid[++i_max][j] == value) {}
     i_max--;
+
+    while (board->grid[--i_min][j] == value) {}
+    i_min++;
 
     while (board->grid[i][++j_max] == value) {}
     j_max--;
 
+    while (board->grid[i][--j_min] == value) {}
+    j_min++;
+
     BLOCK_t block;
-    block.upper_left.i = i;
-    block.upper_left.j = j;
+    block.upper_left.i = i_min;
+    block.upper_left.j = j_min;
     block.lower_right.i = i_max;
     block.lower_right.j = j_max;
     block.value = value;

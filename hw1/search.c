@@ -27,7 +27,7 @@ void random_walk(BOARD_t* board, uint32_t N) {
         printf("\n");
 
         if (child->node->change->goal) {
-            printf("Goal state found!");
+            printf("Goal state found!\n");
             break;
         } else {
             // Expand on selected child

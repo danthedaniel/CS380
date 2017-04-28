@@ -132,7 +132,7 @@ TREE_t* tree_from_board_change(BOARD_t* board, BLOCK_t block, DIRECTION_t dir) {
     change->piece = block.value;
 
     BOARD_t* new_board = board_copy(board);
-    bool goal_met = board_apply_statechange(board, block, change);
+    bool goal_met = board_apply_statechange(new_board, block, change);
 
     change->goal = goal_met;
     tree->state = new_board;
