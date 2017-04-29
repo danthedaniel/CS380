@@ -23,7 +23,7 @@ void random_walk(BOARD_t* board, uint32_t N) {
 
         if (tree->num_children == 0) {
             printf("Not sure how, but you've ran out of options...");
-            goto free_tree;
+            break;
         }
 
         // Now select a random child state
@@ -47,7 +47,6 @@ void random_walk(BOARD_t* board, uint32_t N) {
         }
     }
 
-free_tree:
     tree_free(root);
 }
 
@@ -114,8 +113,6 @@ void breadth_first_search(BOARD_t* board, uint32_t L) {
         old_queue_head->node = NULL;
         free(old_queue_head);
 
-        board_print(leaf->state);
-
         if (leaf->change != NULL && leaf->change->goal) {
             gettimeofday(&tf, NULL);
             print_results(leaf);
@@ -123,7 +120,7 @@ void breadth_first_search(BOARD_t* board, uint32_t L) {
             return;
         } else {
             tree_find_valid_moves(leaf);
-            LIST_t* child = tree->children;
+            LIST_t* child = leaf->children;
 
             while (child != NULL) {
                 uint32_t depth = tree_depth(child->node);
