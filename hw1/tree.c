@@ -69,9 +69,7 @@ void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block) {
 
         // The move is valid if the adjacent spot is either empty, or we're
         // controlling the goal piece and the adjacent spot is the goal.
-        if (value == GOAL_PIECE && adjacent == GRID_GOAL)
-            printf("Goal move - value: %d, adjacent: %d\n", value, adjacent);
-        else if (adjacent != GRID_EMPTY)
+        if (!(value == GOAL_PIECE && adjacent == GRID_GOAL) && (adjacent != GRID_EMPTY))
             up = false;
     }
 
@@ -85,9 +83,7 @@ void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block) {
     for (uint8_t x = j_min; x <= j_max; x++) {
         int8_t adjacent = board->grid[i_max + 1][x];
 
-        if (value == GOAL_PIECE && adjacent == GRID_GOAL)
-            printf("Goal move - value: %d, adjacent: %d\n", value, adjacent);
-        else if (adjacent != GRID_EMPTY)
+        if (!(value == GOAL_PIECE && adjacent == GRID_GOAL) && (adjacent != GRID_EMPTY))
             down = false;
     }
 
@@ -101,9 +97,7 @@ void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block) {
     for (uint8_t y = i_min; y <= i_max; y++) {
         int8_t adjacent = board->grid[y][j_min - 1];
 
-        if (value == GOAL_PIECE && adjacent == GRID_GOAL)
-            printf("Goal move - value: %d, adjacent: %d\n", value, adjacent);
-        else if (adjacent != GRID_EMPTY)
+        if (!(value == GOAL_PIECE && adjacent == GRID_GOAL) && (adjacent != GRID_EMPTY))
             left = false;
     }
 
@@ -117,9 +111,7 @@ void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block) {
     for (uint8_t y = i_min; y <= i_max; y++) {
         int8_t adjacent = board->grid[y][j_max + 1];
 
-        if (value == GOAL_PIECE && adjacent == GRID_GOAL)
-            printf("Goal move - value: %d, adjacent: %d\n", value, adjacent);
-        else if (adjacent != GRID_EMPTY)
+        if (!(value == GOAL_PIECE && adjacent == GRID_GOAL) && (adjacent != GRID_EMPTY))
             right = false;
     }
 
@@ -163,6 +155,17 @@ bool tree_ancestory_contains_state(TREE_t* tree, BOARD_t* board) {
     board_free(board_clone);
 
     return false;
+}
+
+uint32_t tree_depth(TREE_t* tree) {
+    uint32_t length = 0;
+
+    while (tree->parent != NULL) {
+        length++;
+        tree = tree->parent;
+    }
+
+    return length;
 }
 
 LIST_t* list_init(TREE_t* tree) {

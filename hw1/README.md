@@ -12,12 +12,17 @@ Solve a block puzzle through a collection of search algorithms:
 
 The project can be built with `make`.
 
+### Project Information
+
+All functions are documented in their respective header files. Search algorithm
+implementations can be found in the file `search.c`.
+
 ### Running
 
-The project accepts a single command-line argument for a game board filepath.
+The project can be ran by executing the executable built by make:
 
 e.g.:
 
 ```bash
-./hw1 board/SBP-level0.txt
+./hw1
 ```

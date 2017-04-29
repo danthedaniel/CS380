@@ -46,7 +46,7 @@ typedef struct {
  *
  * char* path: The relative or absolute file path to the board specification.
  */
-BOARD_t* board_from_file(char* path);
+BOARD_t* board_from_file(const char* path);
 
 /**
  * Initialize an empty BOARD_t on the heap.

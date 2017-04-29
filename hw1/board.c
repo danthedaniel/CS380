@@ -58,7 +58,7 @@ bool board_solved(BOARD_t* board) {
     return true;
 }
 
-BOARD_t* board_from_file(char* path) {
+BOARD_t* board_from_file(const char* path) {
     BOARD_t* board = NULL;
     char* buffer = NULL;
     uint32_t file_size = 0;
@@ -66,7 +66,7 @@ BOARD_t* board_from_file(char* path) {
 
     if (board_file == NULL) {
         fprintf(stderr, "Error: Could not open file %s\n", path);
-        goto cleanup_fhandler;
+        goto exit;
     }
 
     fseek(board_file, 0, SEEK_END);
@@ -79,9 +79,8 @@ BOARD_t* board_from_file(char* path) {
     board = board_from_buffer(buffer, file_size);
 
     free(buffer);
-cleanup_fhandler:
     fclose(board_file);
-
+exit:
     return board;
 }
 
@@ -283,5 +282,5 @@ int8_t int_parse(char* int_str) {
 }
 
 void statechange_print(STATECHANGE_t* statechange) {
-    printf("(%d,'%c')\n", statechange->piece, statechange->dir);
+    printf("(%d,%c)\n", statechange->piece, statechange->dir);
 }

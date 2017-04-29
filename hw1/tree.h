@@ -71,6 +71,13 @@ TREE_t* tree_from_board_change(BOARD_t* board, BLOCK_t block, DIRECTION_t dir);
  */
 bool tree_ancestory_contains_state(TREE_t* tree, BOARD_t* board);
 
+/**
+ * Return the depth of a node in a tree.
+ *
+ * TREE_t* tree: A node to test for depth.
+ */
+uint32_t tree_depth(TREE_t* tree);
+
 
 struct LIST_t {
     TREE_t* node;
