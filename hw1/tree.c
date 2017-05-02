@@ -55,68 +55,49 @@ void tree_find_valid_moves(TREE_t* tree) {
 }
 
 void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block) {
-    BOARD_t* board = tree->state;
-    uint8_t i_min = block.upper_left.i;
-    uint8_t i_max = block.lower_right.i;
-    uint8_t j_min = block.upper_left.j;
-    uint8_t j_max = block.lower_right.j;
-    int8_t value = block.value;
+    tree_check_block_dir(tree, block, DIR_UP);
+    tree_check_block_dir(tree, block, DIR_DOWN);
+    tree_check_block_dir(tree, block, DIR_LEFT);
+    tree_check_block_dir(tree, block, DIR_RIGHT);
+}
 
-    // Check UP
-    bool up = true;
-    for (uint8_t x = j_min; x <= j_max; x++) {
-        int8_t adjacent = board->grid[i_min - 1][x];
+void tree_check_block_dir(TREE_t* tree, BLOCK_t block, DIRECTION_t dir) {
+    BOARD_t* board = tree->state;
+    int8_t value = block.value;
+    bool can_move = true;
+
+    bool vertical = (dir == DIR_UP || dir == DIR_DOWN);
+    uint8_t axis_min = vertical ? block.upper_left.j : block.upper_left.i;
+    uint8_t axis_max = vertical ? block.lower_right.j : block.lower_right.i;
+
+    // Here we sweep across an edge of the block and check if each grid position
+    // above/below/left/right of the edge is open.
+    for (uint8_t x = axis_min; x <= axis_max; x++) {
+        int8_t adjacent;
+
+        switch (dir) {
+        case DIR_UP:
+            adjacent = board->grid[block.upper_left.i - 1][x];
+            break;
+        case DIR_DOWN:
+            adjacent = board->grid[block.lower_right.i + 1][x];
+            break;
+        case DIR_LEFT:
+            adjacent = board->grid[x][block.upper_left.j - 1];
+            break;
+        case DIR_RIGHT:
+            adjacent = board->grid[x][block.lower_right.j + 1];
+            break;
+        }
 
         // The move is valid if the adjacent spot is either empty, or we're
         // controlling the goal piece and the adjacent spot is the goal.
         if (!(value == GOAL_PIECE && adjacent == GRID_GOAL) && (adjacent != GRID_EMPTY))
-            up = false;
+            can_move = false;
     }
 
-    if (up) {
-        TREE_t* child = tree_from_board_change(board, block, DIR_UP);
-        tree_add_child(tree, child);
-    }
-
-    // Check DOWN
-    bool down = true;
-    for (uint8_t x = j_min; x <= j_max; x++) {
-        int8_t adjacent = board->grid[i_max + 1][x];
-
-        if (!(value == GOAL_PIECE && adjacent == GRID_GOAL) && (adjacent != GRID_EMPTY))
-            down = false;
-    }
-
-    if (down) {
-        TREE_t* child = tree_from_board_change(board, block, DIR_DOWN);
-        tree_add_child(tree, child);
-    }
-
-    // Check LEFT
-    bool left = true;
-    for (uint8_t y = i_min; y <= i_max; y++) {
-        int8_t adjacent = board->grid[y][j_min - 1];
-
-        if (!(value == GOAL_PIECE && adjacent == GRID_GOAL) && (adjacent != GRID_EMPTY))
-            left = false;
-    }
-
-    if (left) {
-        TREE_t* child = tree_from_board_change(board, block, DIR_LEFT);
-        tree_add_child(tree, child);
-    }
-
-    // Check RIGHT
-    bool right = true;
-    for (uint8_t y = i_min; y <= i_max; y++) {
-        int8_t adjacent = board->grid[y][j_max + 1];
-
-        if (!(value == GOAL_PIECE && adjacent == GRID_GOAL) && (adjacent != GRID_EMPTY))
-            right = false;
-    }
-
-    if (right) {
-        TREE_t* child = tree_from_board_change(board, block, DIR_RIGHT);
+    if (can_move) {
+        TREE_t* child = tree_from_board_change(board, block, dir);
         tree_add_child(tree, child);
     }
 }

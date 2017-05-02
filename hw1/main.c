@@ -12,10 +12,10 @@ void test_iterative_deepening_search();
 int main(int argc, char** argv) {
     srand(time(NULL));
 
-    test_random_walk();
-    test_breadth_first_search();
+    //test_random_walk();
+    //test_breadth_first_search();
     test_depth_first_search();
-    test_iterative_deepening_search();
+    //test_iterative_deepening_search();
 
     return 0;
 }

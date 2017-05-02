@@ -49,9 +49,18 @@ void tree_find_valid_moves(TREE_t* tree);
  * Add all valid moves for a specified block on a board grid as children.
  *
  * TREE_t* tree: The current tree node.
- * BLOCK_t block: The block to check for moves.
+ * BLOCK_t block: The block to move.
  */
 void tree_add_moves_for_block(TREE_t* tree, BLOCK_t block);
+
+/**
+ * Check if a block change is valid, and add it as a child if it is.
+ *
+ * TREE_t* tree: The tree to add valid moves to.
+ * BLOCK_t block: The block to check a move for.
+ * DIRECTION_t dir: The direction to check.
+ */
+void tree_check_block_dir(TREE_t* tree, BLOCK_t block, DIRECTION_t dir);
 
 /**
  * Create a new tree node from a block and a new direction to move it in.
