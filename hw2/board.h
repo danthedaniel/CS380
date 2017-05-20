@@ -155,6 +155,20 @@ void board_print(BOARD_t* board);
  */
 BLOCK_t block_from_coords(BOARD_t* board, uint8_t i, uint8_t j);
 
+/**
+ * Locate the goal piece on the board and return it as a BLOCK_t.
+ *
+ * BOARD_t* board: The board to search.
+ */
+BLOCK_t board_find_goal_piece(BOARD_t* board);
+
+/**
+ * Locate the goal location on the board and return it as a POINT_t.
+ *
+ * BOARD_t* board: The board to search.
+ */
+POINT_t board_find_goal(BOARD_t* board);
+
 
 /**
  * Initialize an empty 2-dimensional array of int8_ts on the heap.

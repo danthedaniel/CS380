@@ -1,5 +1,5 @@
 CC=gcc
-FLAGS=--std=c99 -O0 -ggdb
+FLAGS=--std=c99 -O0 -ggdb -lm
 ARTIFACT=hw2
 
 .DEFAULT_GOAL := build

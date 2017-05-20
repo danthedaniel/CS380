@@ -140,17 +140,25 @@ BLOCK_t block_from_coords(BOARD_t* board, uint8_t i, uint8_t j) {
     uint8_t j_min = j;
 
     // Find i/j minimums and maximums for the block
-    while (board->grid[++i_max][j] == value) {}
-    i_max--;
+    if (i < board->height) {
+        while (board->grid[++i_max][j] == value) {}
+        i_max--;
+    }
 
-    while (board->grid[--i_min][j] == value) {}
-    i_min++;
+    if (i > 0) {
+        while (board->grid[--i_min][j] == value) {}
+        i_min++;
+    }
 
-    while (board->grid[i][++j_max] == value) {}
-    j_max--;
+    if (j < board->width) {
+        while (board->grid[i][++j_max] == value) {}
+        j_max--;
+    }
 
-    while (board->grid[i][--j_min] == value) {}
-    j_min++;
+    if (j > 0) {
+        while (board->grid[i][--j_min] == value) {}
+        j_min++;
+    }
 
     BLOCK_t block;
     block.upper_left.i = i_min;
@@ -160,6 +168,43 @@ BLOCK_t block_from_coords(BOARD_t* board, uint8_t i, uint8_t j) {
     block.value = value;
 
     return block;
+}
+
+BLOCK_t board_find_goal_piece(BOARD_t* board) {
+    for (uint8_t i = 0; i < board->height; ++i)
+        for (uint8_t j = 0; j < board->width; ++j)
+            if (board->grid[i][j] == GOAL_PIECE)
+                return block_from_coords(board, i, j);
+
+    // Goal block not found. This shouldn't be possible.
+    BLOCK_t null_block;
+    null_block.upper_left.i = 0;
+    null_block.upper_left.j = 0;
+    null_block.lower_right.i = 0;
+    null_block.lower_right.j = 0;
+
+    return null_block;
+}
+
+POINT_t board_find_goal(BOARD_t* board) {
+    POINT_t goal;
+
+    for (uint8_t i = 0; i < board->height; ++i) {
+        for (uint8_t j = 0; j < board->width; ++j) {
+            if (board->grid[i][j] == GRID_GOAL) {
+                goal.i = i;
+                goal.j = j;
+
+                return goal;
+            }
+        }
+    }
+
+    // Goal not found. This shouldn't be possible.
+    goal.i = 0;
+    goal.j = 0;
+
+    return goal;
 }
 
 bool board_apply_statechange(BOARD_t* board, BLOCK_t block, STATECHANGE_t* change) {

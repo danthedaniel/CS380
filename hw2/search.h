@@ -6,53 +6,41 @@
 #include "board.h"
 #include "tree.h"
 
-/**
- * Solve a board with random walk. Use up to N steps.
- *
- * BOARD_t* board: The board to be solved.
- * uint32_t N: The maximum number of steps to take in solving the board.
- */
-void random_walk(BOARD_t* board, uint32_t N);
-
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
 /**
- * Solve a board with depth-first search. Only travel up to L levels deep.
+ * Solve a board problem with the A* algorithm.
  *
- * BOARD_t* board: The board to be solved.
- * uint32_t L: The maximum depth.
+ * BOARD_t* board: The board to solve.
+ * function heuristic: A heuristic function.
  */
-void depth_first_search(BOARD_t* board, uint32_t L);
+void a_star(BOARD_t* board, uint16_t (*heuristic)(BOARD_t* state));
 
 /**
- * Recursive function for depth_first_search. Will return true if a solution is
- * found.
+ * Given a list of nodes, return the node in the list with the best calculated
+ * heuristic value.
  *
- * TREE_t* tree: The current tree node.
- * uint32_t L: The remaining levels of depth for exploration. If 0, the function
- * will return immediately.
- * uint64_t* nodes: Will contain the number of nodes explored.
+ * LIST_t* list: The list to search.
+ * function heuristic: The heuristic to calculate for each node.
  */
-bool depth_first_search_iter(TREE_t* tree, uint32_t L);
+TREE_t* best_node_available(LIST_t* list, uint16_t (*heuristic)(BOARD_t* state));
 
 
 /**
- * Solve a board with breadth-first search. Only travel up to L levels deep.
+ * A* heuristic that calculates the manhattan distance of the goal block to the
+ * goal.
  *
- * BOARD_t* board: The board to be solved.
- * uint32_t L: The maximum depth.
+ * BOARD_t* state: That state to calculate the heuristic for.
  */
-void breadth_first_search(BOARD_t* board, uint32_t L);
-
+uint16_t manhattan_distance(BOARD_t* state);
 
 /**
- * Solve a board with iterative-deepening search. Start with a max-depth of Li,
- * and stop searching at Lm levels deep.
+ * A* custom heuristic implementation.
  *
- * BOARD_t* board: The board to be solved.
- * uint32_t Li: Starting depth.
- * uint32_t Lm: Maximum depth.
+ * BOARD_t* state: That state to calculate the heuristic for.
  */
-void iterative_deepening_search(BOARD_t* board, uint32_t Li, uint32_t Lm);
+uint16_t custom_heuristic(BOARD_t* state);
 
 
 /**

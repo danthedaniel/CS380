@@ -109,6 +109,19 @@ LIST_t* list_init(TREE_t* node);
 void list_append(LIST_t* list, TREE_t* node);
 
 /**
+ * Remove a node from a list by reference. May return NULL (an empty list).
+ *
+ * LIST_t* list: The list to modify.
+ * TREE_t* node: The node to remove.
+ */
+LIST_t* list_remove(LIST_t* list, TREE_t* node);
+
+/**
+ * Whether a list contains a tree with a board state (once normalized).
+ */
+bool list_contains_state(LIST_t* list, BOARD_t* board);
+
+/**
  * Return true if a list element has a statechange for the given block.
  *
  * LIST_t* list: The list to search.

@@ -158,11 +158,59 @@ LIST_t* list_init(TREE_t* tree) {
     return list;
 }
 
+LIST_t* list_remove(LIST_t* list, TREE_t* node) {
+    LIST_t* list_ref = list;
+    LIST_t* prev = NULL;
+
+    while (list_ref != NULL) {
+        if (list_ref->node == node) {
+            LIST_t* removed_elem;
+
+            if (prev == NULL) {
+                // If the first element was the best
+                removed_elem = list;
+                list = list->next;
+            } else {
+                removed_elem = list_ref;
+                prev->next = list_ref->next;
+            }
+
+            // Free the removed element from the heap
+            removed_elem->next = NULL;
+            removed_elem->node = NULL;
+            list_free(removed_elem);
+        }
+
+        prev = list_ref;
+        list_ref = list_ref->next;
+    }
+
+    return list;
+}
+
 void list_append(LIST_t* list, TREE_t* tree) {
     while (list->next != NULL)
         list = list->next;
 
     list->next = list_init(tree);
+}
+
+bool list_contains_state(LIST_t* list, BOARD_t* board) {
+    BOARD_t* board_clone = board_copy(board);
+    board_normalize(board_clone);
+
+    while (list != NULL) {
+        if (board_equals(list->node->state, board_clone)) {
+            board_free(board_clone);
+            return true;
+        }
+
+        list = list->next;
+    }
+
+    board_free(board_clone);
+
+    return false;
 }
 
 bool list_contains_block(LIST_t* list, int8_t block) {
@@ -177,8 +225,12 @@ bool list_contains_block(LIST_t* list, int8_t block) {
 }
 
 void list_free(LIST_t* list) {
+    if (list == NULL)
+        return;
+
     if (list->next != NULL)
         list_free(list->next);
 
     tree_free(list->node);
+    free(list);
 }

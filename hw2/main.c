@@ -4,61 +4,36 @@
 #include "search.h"
 #include "board.h"
 
-void test_random_walk();
-void test_depth_first_search();
-void test_breadth_first_search();
-void test_iterative_deepening_search();
+void test_manhattan_distance();
+void test_custom_heuristic();
 
 int main(int argc, char** argv) {
     srand(time(NULL));
 
-    //test_random_walk();
-    //test_breadth_first_search();
-    test_depth_first_search();
-    //test_iterative_deepening_search();
+    test_manhattan_distance();
+    test_custom_heuristic();
 
     return 0;
 }
 
-void test_random_walk() {
-    BOARD_t* board = board_from_file("SBP-level0.txt");
+void test_manhattan_distance() {
+    BOARD_t* board1 = board_from_file("SBP-level1.txt");
 
-    if (board == NULL)
+    if (board1 == NULL)
         return;
 
-    random_walk(board, 3);
-    board_free(board);
+    printf("Testing A* with manhattan distance on level1 ...\n");
+    a_star(board1, manhattan_distance);
+    board_free(board1);
 }
 
-void test_breadth_first_search() {
-    BOARD_t* board = board_from_file("SBP-level0.txt");
+void test_custom_heuristic() {
+    BOARD_t* board1 = board_from_file("SBP-level1.txt");
 
-    if (board == NULL)
+    if (board1 == NULL)
         return;
 
-    printf("Performing breadth-first search on the board...\n");
-    breadth_first_search(board, 17);
-    board_free(board);
-}
-
-void test_depth_first_search() {
-    BOARD_t* board = board_from_file("SBP-level1.txt");
-
-    if (board == NULL)
-        return;
-
-    printf("Performing depth-first search on the board...\n");
-    depth_first_search(board, 16);
-    board_free(board);
-}
-
-void test_iterative_deepening_search() {
-    BOARD_t* board = board_from_file("SBP-level1.txt");
-
-    if (board == NULL)
-        return;
-
-    printf("Performing iterative-deepening search on the board...\n");
-    iterative_deepening_search(board, 16, 32);
-    board_free(board);
+    printf("Testing A* with custom heuristic on level1 ...\n");
+    a_star(board1, custom_heuristic);
+    board_free(board1);
 }

@@ -12,7 +12,7 @@ void test_iterative_deepening_search();
 int main(int argc, char** argv) {
     srand(time(NULL));
 
-    //test_random_walk();
+    test_random_walk();
     //test_breadth_first_search();
     test_depth_first_search();
     //test_iterative_deepening_search();
@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
 }
 
 void test_random_walk() {
-    BOARD_t* board = board_from_file("SBP-level0.txt");
+    BOARD_t* board = board_from_file("../SBP-level0.txt");
 
     if (board == NULL)
         return;
@@ -31,7 +31,7 @@ void test_random_walk() {
 }
 
 void test_breadth_first_search() {
-    BOARD_t* board = board_from_file("SBP-level0.txt");
+    BOARD_t* board = board_from_file("../SBP-level0.txt");
 
     if (board == NULL)
         return;
@@ -42,7 +42,7 @@ void test_breadth_first_search() {
 }
 
 void test_depth_first_search() {
-    BOARD_t* board = board_from_file("SBP-level1.txt");
+    BOARD_t* board = board_from_file("../SBP-level1.txt");
 
     if (board == NULL)
         return;
@@ -53,7 +53,7 @@ void test_depth_first_search() {
 }
 
 void test_iterative_deepening_search() {
-    BOARD_t* board = board_from_file("SBP-level1.txt");
+    BOARD_t* board = board_from_file("../SBP-level1.txt");
 
     if (board == NULL)
         return;
